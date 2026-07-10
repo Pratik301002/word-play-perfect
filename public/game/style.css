@@ -14,7 +14,7 @@
   --absent: #3a3a3c;
   --overlay: rgba(0, 0, 0, 0.6);
   --radius: 4px;
-  --tile-size: min(62px, 14vw);
+  --tile-size: clamp(44px, 10vw, 60px);
   --tile-gap: 5px;
   --flip-time: 500ms;
 }
@@ -105,10 +105,10 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 6px 8px 4px;
+  justify-content: flex-start;
+  padding: 6px 8px;
   gap: 8px;
-  min-height: 0;
+  overflow: hidden;
 }
 .mode-indicator {
   font-size: 11px;
@@ -150,11 +150,7 @@ body {
     border-color 100ms ease;
   perspective: 1000px;
 }
-@media (max-height: 640px) {
-  :root { --tile-size: min(52px, 12.5vw); }
-  .key { height: 48px; }
-  .keyboard { margin-bottom: -20px; }
-}
+
 .tile.filled {
   border-color: var(--tile-filled-border);
   animation: pop 100ms ease;
@@ -314,7 +310,74 @@ body {
   color: #d7dadc;
 }
 
+@media (max-height: 760px) {
+  :root {
+    --tile-size: clamp(42px, 9vw, 52px);
+    --tile-gap: 4px;
+  }
 
+  .board {
+    padding: 4px;
+  }
+
+  .keyboard {
+    gap: 4px;
+    padding: 4px;
+  }
+
+  .krow {
+    gap: 4px;
+  }
+
+  .key {
+    height: 44px;
+    font-size: 12px;
+  }
+
+  .key.wide {
+    font-size: 11px;
+  }
+
+  .topbar {
+    min-height: 46px;
+    padding: 6px 10px;
+  }
+
+  .mode-indicator {
+    font-size: 10px;
+    margin: 2px 0;
+  }
+}
+
+/* Very small phones (320px–360px) */
+@media (max-width: 360px) {
+  :root {
+    --tile-size: 40px;
+    --tile-gap: 3px;
+  }
+
+  .board {
+    padding: 2px;
+  }
+
+  .keyboard {
+    gap: 3px;
+    padding: 2px;
+  }
+
+  .krow {
+    gap: 3px;
+  }
+
+  .key {
+    height: 40px;
+    font-size: 11px;
+  }
+
+  .key.wide {
+    font-size: 10px;
+  }
+}
 /* Toaster */
 .toaster {
   position: fixed;
