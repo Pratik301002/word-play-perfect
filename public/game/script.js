@@ -117,6 +117,35 @@
   const keyboardEl = document.getElementById("keyboard");
   const modeIndicatorEl = document.getElementById("modeIndicator");
 
+  function sizeBoard() {
+    const gameEl = document.querySelector(".game");
+    const boardEl = document.getElementById("board");
+    const keyboardEl = document.getElementById("keyboard");
+    if (!gameEl || !boardEl || !keyboardEl) return;
+  
+    const gameStyles = getComputedStyle(gameEl);
+    const gamePaddingV =
+      parseFloat(gameStyles.paddingTop) + parseFloat(gameStyles.paddingBottom);
+    const gameGap = parseFloat(gameStyles.gap) || 0;
+  
+    const availableHeight =
+      gameEl.clientHeight -
+      gamePaddingV -
+      modeIndicatorEl.offsetHeight -
+      keyboardEl.offsetHeight -
+      gameGap * 2; // gap above and below the board
+  
+    const availableWidth = gameEl.clientWidth;
+  
+    const rows = 6, cols = 5, tileGap = 5, boardPadding = 16; // 8px * 2
+  
+    const byHeight = (availableHeight - tileGap * (rows - 1) - boardPadding) / rows;
+    const byWidth = (availableWidth - tileGap * (cols - 1) - boardPadding) / cols;
+  
+    const tileSize = Math.max(38, Math.min(byHeight, byWidth, 62));
+    document.documentElement.style.setProperty("--tile-size", `${tileSize}px`);
+  }
+
   function renderAll() {
     renderBoard();
     renderKeyboard();
@@ -711,6 +740,7 @@
   );
 
   // Boot
+  sizeBoard();
   applySettings();
   loadGame();
   // Show help modal once
