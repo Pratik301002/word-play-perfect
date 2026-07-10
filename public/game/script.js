@@ -107,6 +107,11 @@
       newGame("daily");
       return;
     }
+    // if the saved game is already finished, start a fresh one
+    if (g.status !== "playing") {
+      newGame(g.mode === "daily" ? "daily" : "random");
+      return;
+    }
     game = g;
     mode = g.mode;
     renderAll();
@@ -431,7 +436,7 @@
     modalRoot.innerHTML = "";
   }
 
-  function openStatsModal() {
+  function openStatsModal(won) {
     const wrap = document.createElement("div");
     const total = stats.played;
     const winPct = total ? Math.round((stats.wins / total) * 100) : 0;
@@ -441,8 +446,14 @@
       : "0";
     const maxDist = Math.max(1, ...stats.distribution);
     const lastRow = game.status === "won" ? game.guesses.length : -1;
+    const answerBanner = won === false
+      ? `<div class="answer-reveal"><span class="answer-label">The word was</span><span class="answer-word">${game.answer}</span></div>`
+      : won === true
+        ? `<div class="answer-reveal won"><span class="answer-label">You got it!</span><span class="answer-word">${game.answer}</span></div>`
+        : "";
     wrap.innerHTML = `
       <h2>Statistics</h2>
+      ${answerBanner}
       <div class="stats-grid">
         <div class="stat"><div class="num">${stats.played}</div><div class="lbl">Played</div></div>
         <div class="stat"><div class="num">${winPct}</div><div class="lbl">Win %</div></div>
@@ -474,8 +485,8 @@
     });
   }
 
-  function openEndGameModal() {
-    setTimeout(openStatsModal, 1200);
+  function openEndGameModal(won) {
+    setTimeout(() => openStatsModal(won), 1200);
   }
 
   function openSettingsModal() {

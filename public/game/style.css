@@ -523,6 +523,41 @@ body {
 }
 
 /* Stats */
+.answer-reveal {
+  text-align: center;
+  padding: 16px 12px;
+  margin: 8px 0 4px;
+  border-radius: 8px;
+  background: var(--absent);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: answerReveal 400ms cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+.answer-reveal.won {
+  background: var(--correct);
+}
+.answer-label {
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+.answer-word {
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+@keyframes answerReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
