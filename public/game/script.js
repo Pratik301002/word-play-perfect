@@ -18,16 +18,19 @@
     autoFocus: true,
   };
   const defaultStats = {
-    played: 0, wins: 0, losses: 0,
-    currentStreak: 0, bestStreak: 0,
+    played: 0,
+    wins: 0,
+    losses: 0,
+    currentStreak: 0,
+    bestStreak: 0,
     distribution: [0, 0, 0, 0, 0, 0],
     hintUsed: 0,
   };
 
   let settings = loadJSON(SETTINGS_KEY, defaultSettings);
   let stats = loadJSON(STATS_KEY, defaultStats);
-  let mode = "daily";           // 'daily' | 'random'
-  let game = null;              // current game state
+  let mode = "daily"; // 'daily' | 'random'
+  let game = null; // current game state
 
   // ---------- Helpers ----------
   function loadJSON(key, fallback) {
@@ -36,14 +39,18 @@
       if (!raw) return { ...fallback };
       const parsed = JSON.parse(raw);
       return { ...fallback, ...parsed };
-    } catch { return { ...fallback }; }
+    } catch {
+      return { ...fallback };
+    }
   }
   function saveJSON(key, obj) {
-    try { localStorage.setItem(key, JSON.stringify(obj)); } catch {}
+    try {
+      localStorage.setItem(key, JSON.stringify(obj));
+    } catch {}
   }
   function todayStamp() {
     const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   }
   function dayNumber() {
     const start = new Date(2024, 0, 1);
@@ -52,7 +59,10 @@
   }
   function hash(str) {
     let h = 2166136261 >>> 0;
-    for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 16777619) >>> 0; }
+    for (let i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619) >>> 0;
+    }
     return h;
   }
   function dailyWord() {
@@ -77,19 +87,29 @@
       guesses: [],
       current: "",
       status: "playing",
-      hintsUsed: [],       // labels of hints used
+      hintsUsed: [], // labels of hints used
       hintTainted: false,
     };
     saveGame();
     renderAll();
   }
-  function saveGame() { saveJSON(STORAGE_KEY, game); }
+  function saveGame() {
+    saveJSON(STORAGE_KEY, game);
+  }
   function loadGame() {
     const g = loadJSON(STORAGE_KEY, null);
-    if (!g || !g.answer) { newGame("daily"); return; }
+    if (!g || !g.answer) {
+      newGame("daily");
+      return;
+    }
     // if it was daily but a new day, start fresh daily
-    if (g.mode === "daily" && g.day !== todayStamp()) { newGame("daily"); return; }
-    game = g; mode = g.mode; renderAll();
+    if (g.mode === "daily" && g.day !== todayStamp()) {
+      newGame("daily");
+      return;
+    }
+    game = g;
+    mode = g.mode;
+    renderAll();
   }
 
   // ---------- Rendering ----------
@@ -97,21 +117,28 @@
   const keyboardEl = document.getElementById("keyboard");
   const modeIndicatorEl = document.getElementById("modeIndicator");
 
-  function renderAll() { renderBoard(); renderKeyboard(); updateModeIndicator(); applySettings(); }
+  function renderAll() {
+    renderBoard();
+    renderKeyboard();
+    updateModeIndicator();
+    applySettings();
+  }
   function updateModeIndicator() {
-    modeIndicatorEl.textContent = mode === "daily"
-      ? `Daily #${dayNumber()}`
-      : "Random";
+    modeIndicatorEl.textContent = mode === "daily" ? `Daily #${dayNumber()}` : "Random";
   }
 
   function renderBoard() {
     boardEl.innerHTML = "";
     for (let r = 0; r < MAX_GUESSES; r++) {
       const row = document.createElement("div");
-      row.className = "row"; row.dataset.row = r; row.setAttribute("role", "row");
+      row.className = "row";
+      row.dataset.row = r;
+      row.setAttribute("role", "row");
       for (let c = 0; c < WORD_LENGTH; c++) {
         const tile = document.createElement("div");
-        tile.className = "tile"; tile.dataset.col = c; tile.setAttribute("role", "gridcell");
+        tile.className = "tile";
+        tile.dataset.col = c;
+        tile.setAttribute("role", "gridcell");
         row.appendChild(tile);
       }
       boardEl.appendChild(row);
@@ -123,31 +150,36 @@
       const row = boardEl.children[game.guesses.length];
       if (row) {
         for (let i = 0; i < WORD_LENGTH; i++) {
-          const t = row.children[i]; const ch = game.current[i];
-          if (ch) { t.textContent = ch; t.classList.add("filled"); }
+          const t = row.children[i];
+          const ch = game.current[i];
+          if (ch) {
+            t.textContent = ch;
+            t.classList.add("filled");
+          }
         }
       }
     }
   }
 
   const KEYS = [
-    ["Q","W","E","R","T","Y","U","I","O","P"],
-    ["A","S","D","F","G","H","J","K","L"],
-    ["ENTER","Z","X","C","V","B","N","M","BACK"],
+    ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+    ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+    ["ENTER", "Z", "X", "C", "V", "B", "N", "M", "BACK"],
   ];
   function renderKeyboard() {
     keyboardEl.innerHTML = "";
     const state = keyboardState();
-    KEYS.forEach(row => {
+    KEYS.forEach((row) => {
       const rowEl = document.createElement("div");
       rowEl.className = "krow";
-      row.forEach(k => {
+      row.forEach((k) => {
         const btn = document.createElement("button");
         btn.className = "key" + (k === "ENTER" || k === "BACK" ? " wide" : "");
         btn.type = "button";
         btn.setAttribute("aria-label", k === "BACK" ? "Backspace" : k);
         if (k === "BACK") {
-          btn.innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M22 3H7c-.7 0-1.3.4-1.7.9L0 12l5.3 8.1c.4.5 1 .9 1.7.9h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.6L17.6 17 14 13.4 10.4 17 9 15.6 12.6 12 9 8.4 10.4 7 14 10.6 17.6 7 19 8.4 15.4 12 19 15.6z"/></svg>';
+          btn.innerHTML =
+            '<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M22 3H7c-.7 0-1.3.4-1.7.9L0 12l5.3 8.1c.4.5 1 .9 1.7.9h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.6L17.6 17 14 13.4 10.4 17 9 15.6 12.6 12 9 8.4 10.4 7 14 10.6 17.6 7 19 8.4 15.4 12 19 15.6z"/></svg>';
         } else {
           btn.textContent = k;
         }
@@ -164,10 +196,11 @@
     // Compute best-known state per letter.
     const rank = { correct: 3, present: 2, absent: 1 };
     const state = {};
-    game.guesses.forEach(g => {
+    game.guesses.forEach((g) => {
       const ev = evaluate(g, game.answer);
       for (let i = 0; i < WORD_LENGTH; i++) {
-        const c = g[i], s = ev[i];
+        const c = g[i],
+          s = ev[i];
         if (!state[c] || rank[s] > rank[state[c]]) state[c] = s;
       }
     });
@@ -180,12 +213,19 @@
     const answerArr = answer.split("");
     const used = Array(WORD_LENGTH).fill(false);
     for (let i = 0; i < WORD_LENGTH; i++) {
-      if (guess[i] === answerArr[i]) { res[i] = "correct"; used[i] = true; }
+      if (guess[i] === answerArr[i]) {
+        res[i] = "correct";
+        used[i] = true;
+      }
     }
     for (let i = 0; i < WORD_LENGTH; i++) {
       if (res[i] === "correct") continue;
       for (let j = 0; j < WORD_LENGTH; j++) {
-        if (!used[j] && guess[i] === answerArr[j]) { res[i] = "present"; used[j] = true; break; }
+        if (!used[j] && guess[i] === answerArr[j]) {
+          res[i] = "present";
+          used[j] = true;
+          break;
+        }
       }
     }
     return res;
@@ -209,7 +249,7 @@
     const delayPer = settings.reduceMotion ? 0 : 300;
     for (let i = 0; i < WORD_LENGTH; i++) {
       const tile = row.children[i];
-      await new Promise(r => setTimeout(r, delayPer));
+      await new Promise((r) => setTimeout(r, delayPer));
       if (!settings.reduceMotion) {
         tile.classList.add("flip");
         setTimeout(() => tile.classList.add(evaluation[i]), 250);
@@ -217,7 +257,7 @@
         tile.classList.add(evaluation[i]);
       }
     }
-    await new Promise(r => setTimeout(r, settings.reduceMotion ? 0 : 400));
+    await new Promise((r) => setTimeout(r, settings.reduceMotion ? 0 : 400));
   }
 
   // ---------- Input ----------
@@ -230,12 +270,14 @@
   function addLetter(ch) {
     if (game.current.length >= WORD_LENGTH) return;
     game.current += ch;
-    saveGame(); renderBoard();
+    saveGame();
+    renderBoard();
   }
   function backspace() {
     if (game.current.length === 0) return;
     game.current = game.current.slice(0, -1);
-    saveGame(); renderBoard();
+    saveGame();
+    renderBoard();
   }
   async function submitGuess() {
     const guess = game.current;
@@ -272,7 +314,7 @@
       const ev = evaluate(past, game.answer);
       for (let i = 0; i < WORD_LENGTH; i++) {
         if (ev[i] === "correct" && guess[i] !== past[i]) {
-          return `${ordinal(i+1)} letter must be ${past[i]}`;
+          return `${ordinal(i + 1)} letter must be ${past[i]}`;
         }
       }
       for (let i = 0; i < WORD_LENGTH; i++) {
@@ -283,7 +325,9 @@
     }
     return null;
   }
-  function ordinal(n) { return ["1st","2nd","3rd","4th","5th"][n-1] || `${n}th`; }
+  function ordinal(n) {
+    return ["1st", "2nd", "3rd", "4th", "5th"][n - 1] || `${n}th`;
+  }
 
   function shakeRow(msg) {
     const rowIndex = game.guesses.length;
@@ -303,7 +347,7 @@
   }
 
   // ---------- Stats ----------
-  const PRAISE = ["Genius","Magnificent","Impressive","Splendid","Great","Phew"];
+  const PRAISE = ["Genius", "Magnificent", "Impressive", "Splendid", "Great", "Phew"];
   function celebrate(guessCount) {
     toast(PRAISE[guessCount - 1] || "Nice");
     const row = boardEl.children[guessCount - 1];
@@ -338,16 +382,24 @@
     backdrop.className = "modal-backdrop";
     backdrop.addEventListener("click", closeModal);
     const modal = document.createElement("div");
-    modal.className = "modal"; modal.setAttribute("role", "dialog"); modal.setAttribute("aria-modal", "true");
+    modal.className = "modal";
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
     const close = document.createElement("button");
-    close.className = "close"; close.setAttribute("aria-label", "Close"); close.innerHTML = "&times;";
+    close.className = "close";
+    close.setAttribute("aria-label", "Close");
+    close.innerHTML = "&times;";
     close.addEventListener("click", closeModal);
-    modal.appendChild(close); modal.appendChild(node);
-    modalRoot.appendChild(backdrop); modalRoot.appendChild(modal);
-    modalRoot.classList.add("open"); modalRoot.setAttribute("aria-hidden", "false");
+    modal.appendChild(close);
+    modal.appendChild(node);
+    modalRoot.appendChild(backdrop);
+    modalRoot.appendChild(modal);
+    modalRoot.classList.add("open");
+    modalRoot.setAttribute("aria-hidden", "false");
   }
   function closeModal() {
-    modalRoot.classList.remove("open"); modalRoot.setAttribute("aria-hidden", "true");
+    modalRoot.classList.remove("open");
+    modalRoot.setAttribute("aria-hidden", "true");
     modalRoot.innerHTML = "";
   }
 
@@ -355,8 +407,10 @@
     const wrap = document.createElement("div");
     const total = stats.played;
     const winPct = total ? Math.round((stats.wins / total) * 100) : 0;
-    const totalWins = stats.distribution.reduce((a,b)=>a+b,0);
-    const avg = totalWins ? (stats.distribution.reduce((a,b,i)=>a+b*(i+1),0)/totalWins).toFixed(2) : "0";
+    const totalWins = stats.distribution.reduce((a, b) => a + b, 0);
+    const avg = totalWins
+      ? (stats.distribution.reduce((a, b, i) => a + b * (i + 1), 0) / totalWins).toFixed(2)
+      : "0";
     const maxDist = Math.max(1, ...stats.distribution);
     const lastRow = game.status === "won" ? game.guesses.length : -1;
     wrap.innerHTML = `
@@ -370,10 +424,14 @@
       <div style="text-align:center;font-size:12px;color:var(--muted)">Avg guesses ${avg} · Hints used ${stats.hintUsed}</div>
       <h3 style="text-align:center;margin:16px 0 6px;font-size:13px;letter-spacing:.1em;text-transform:uppercase">Guess distribution</h3>
       <div class="dist">
-        ${stats.distribution.map((n,i) => `
-          <div class="dist-row"><div class="idx">${i+1}</div>
-          <div class="bar ${i===lastRow?'hi':''}" style="width:${Math.max(7,(n/maxDist)*100)}%">${n}</div></div>
-        `).join("")}
+        ${stats.distribution
+          .map(
+            (n, i) => `
+          <div class="dist-row"><div class="idx">${i + 1}</div>
+          <div class="bar ${i === lastRow ? "hi" : ""}" style="width:${Math.max(7, (n / maxDist) * 100)}%">${n}</div></div>
+        `,
+          )
+          .join("")}
       </div>
       <div class="actions">
         ${game.status !== "playing" ? `<button class="primary-btn" id="shareBtn">Share</button>` : ""}
@@ -382,14 +440,23 @@
     openModal(wrap);
     const shareBtn = wrap.querySelector("#shareBtn");
     shareBtn && shareBtn.addEventListener("click", share);
-    wrap.querySelector("#newRandomBtn").addEventListener("click", () => { closeModal(); newGame("random"); });
+    wrap.querySelector("#newRandomBtn").addEventListener("click", () => {
+      closeModal();
+      newGame("random");
+    });
   }
 
-  function openEndGameModal() { setTimeout(openStatsModal, 1200); }
+  function openEndGameModal() {
+    setTimeout(openStatsModal, 1200);
+  }
 
   function openSettingsModal() {
     const rows = [
-      { key: "hardMode", name: "Hard Mode", desc: "Any revealed hints must be used in subsequent guesses." },
+      {
+        key: "hardMode",
+        name: "Hard Mode",
+        desc: "Any revealed hints must be used in subsequent guesses.",
+      },
       { key: "highContrast", name: "High Contrast", desc: "For improved color visibility." },
       { key: "reduceMotion", name: "Reduce Motion", desc: "Minimize animations." },
       { key: "sound", name: "Sound Effects", desc: "Subtle click and win sounds." },
@@ -397,27 +464,35 @@
       { key: "autoFocus", name: "Auto Focus", desc: "Capture keystrokes automatically." },
     ];
     const wrap = document.createElement("div");
-    wrap.innerHTML = `<h2>Settings</h2>` + rows.map(r => `
+    wrap.innerHTML =
+      `<h2>Settings</h2>` +
+      rows
+        .map(
+          (r) => `
       <div class="setting-row">
         <div class="txt"><div class="name">${r.name}</div><div class="desc">${r.desc}</div></div>
-        <label class="switch"><input type="checkbox" data-setting="${r.key}" ${settings[r.key]?"checked":""}><span class="slider"></span></label>
+        <label class="switch"><input type="checkbox" data-setting="${r.key}" ${settings[r.key] ? "checked" : ""}><span class="slider"></span></label>
       </div>
-    `).join("") + `
+    `,
+        )
+        .join("") +
+      `
       <div class="setting-row">
         <div class="txt"><div class="name">Reset Statistics</div><div class="desc">Erases all game history.</div></div>
         <button class="primary-btn secondary" id="resetStats">Reset</button>
       </div>`;
     openModal(wrap);
-    wrap.querySelectorAll("input[data-setting]").forEach(el => {
+    wrap.querySelectorAll("input[data-setting]").forEach((el) => {
       el.addEventListener("change", () => {
         settings[el.dataset.setting] = el.checked;
         saveJSON(SETTINGS_KEY, settings);
-        applySettings(); renderKeyboard();
+        applySettings();
+        renderKeyboard();
       });
     });
     wrap.querySelector("#resetStats").addEventListener("click", () => {
       if (confirm("Reset all statistics? This cannot be undone.")) {
-        stats = { ...defaultStats, distribution: [0,0,0,0,0,0] };
+        stats = { ...defaultStats, distribution: [0, 0, 0, 0, 0, 0] };
         saveJSON(STATS_KEY, stats);
         toast("Statistics reset");
       }
@@ -448,9 +523,9 @@
     if (used.length >= 3) return toast("No hints left");
     game.hintTainted = true;
     if (used.length === 0) {
-      const vowels = "AEIOU".split("").filter(v => game.answer.includes(v));
+      const vowels = "AEIOU".split("").filter((v) => game.answer.includes(v));
       const guessed = new Set(game.guesses.join(""));
-      const unrev = vowels.find(v => !guessed.has(v)) || vowels[0];
+      const unrev = vowels.find((v) => !guessed.has(v)) || vowels[0];
       used.push("vowel");
       toast(`Contains the vowel ${unrev}`);
     } else if (used.length === 1) {
@@ -460,9 +535,11 @@
     } else {
       // reveal an unrevealed correct position
       const revealedGreens = new Set();
-      game.guesses.forEach(g => {
+      game.guesses.forEach((g) => {
         const ev = evaluate(g, game.answer);
-        ev.forEach((s, i) => { if (s === "correct") revealedGreens.add(i); });
+        ev.forEach((s, i) => {
+          if (s === "correct") revealedGreens.add(i);
+        });
       });
       const options = [];
       for (let i = 0; i < WORD_LENGTH; i++) if (!revealedGreens.has(i)) options.push(i);
@@ -478,7 +555,8 @@
   const toaster = document.getElementById("toaster");
   function toast(msg, ms = 1600) {
     const el = document.createElement("div");
-    el.className = "toast"; el.textContent = msg;
+    el.className = "toast";
+    el.textContent = msg;
     toaster.appendChild(el);
     setTimeout(() => el.classList.add("fade"), ms);
     setTimeout(() => el.remove(), ms + 260);
@@ -487,11 +565,16 @@
   // ---------- Share ----------
   function share() {
     const header = mode === "daily" ? `Wordle #${dayNumber()}` : `Wordle Random`;
-    const score = game.status === "won" ? `${game.guesses.length}/${MAX_GUESSES}${game.hintTainted?"*":""}` : `X/${MAX_GUESSES}`;
-    const grid = game.guesses.map(g => {
-      const ev = evaluate(g, game.answer);
-      return ev.map(s => s === "correct" ? "🟩" : s === "present" ? "🟨" : "⬛").join("");
-    }).join("\n");
+    const score =
+      game.status === "won"
+        ? `${game.guesses.length}/${MAX_GUESSES}${game.hintTainted ? "*" : ""}`
+        : `X/${MAX_GUESSES}`;
+    const grid = game.guesses
+      .map((g) => {
+        const ev = evaluate(g, game.answer);
+        return ev.map((s) => (s === "correct" ? "🟩" : s === "present" ? "🟨" : "⬛")).join("");
+      })
+      .join("\n");
     const text = `${header} ${score}\n\n${grid}`;
     if (navigator.share) {
       navigator.share({ text }).catch(() => copyText(text));
@@ -501,12 +584,20 @@
   }
   function copyText(text) {
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(text).then(() => toast("Copied to clipboard")).catch(fallback);
+      navigator.clipboard
+        .writeText(text)
+        .then(() => toast("Copied to clipboard"))
+        .catch(fallback);
     } else fallback();
     function fallback() {
       const ta = document.createElement("textarea");
-      ta.value = text; document.body.appendChild(ta); ta.select();
-      try { document.execCommand("copy"); toast("Copied to clipboard"); } catch {}
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand("copy");
+        toast("Copied to clipboard");
+      } catch {}
       ta.remove();
     }
   }
@@ -517,27 +608,38 @@
     if (settings.reduceMotion) return;
     canvas.classList.add("on");
     const ctx = canvas.getContext("2d");
-    const W = canvas.width = window.innerWidth;
-    const H = canvas.height = window.innerHeight;
-    const colors = ["#6aaa64","#c9b458","#ffffff","#f5793a","#85c0f9"];
+    const W = (canvas.width = window.innerWidth);
+    const H = (canvas.height = window.innerHeight);
+    const colors = ["#6aaa64", "#c9b458", "#ffffff", "#f5793a", "#85c0f9"];
     const bits = Array.from({ length: 120 }, () => ({
-      x: Math.random()*W, y: -20 - Math.random()*H*0.5,
-      vx: (Math.random()-0.5)*3, vy: 2 + Math.random()*4,
-      s: 4 + Math.random()*6, c: colors[Math.floor(Math.random()*colors.length)],
-      r: Math.random()*Math.PI,
+      x: Math.random() * W,
+      y: -20 - Math.random() * H * 0.5,
+      vx: (Math.random() - 0.5) * 3,
+      vy: 2 + Math.random() * 4,
+      s: 4 + Math.random() * 6,
+      c: colors[Math.floor(Math.random() * colors.length)],
+      r: Math.random() * Math.PI,
     }));
     let frames = 0;
     (function tick() {
       ctx.clearRect(0, 0, W, H);
-      bits.forEach(b => {
-        b.x += b.vx; b.y += b.vy; b.r += 0.1;
-        ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.r);
-        ctx.fillStyle = b.c; ctx.fillRect(-b.s/2, -b.s/2, b.s, b.s*0.6);
+      bits.forEach((b) => {
+        b.x += b.vx;
+        b.y += b.vy;
+        b.r += 0.1;
+        ctx.save();
+        ctx.translate(b.x, b.y);
+        ctx.rotate(b.r);
+        ctx.fillStyle = b.c;
+        ctx.fillRect(-b.s / 2, -b.s / 2, b.s, b.s * 0.6);
         ctx.restore();
       });
       frames++;
       if (frames < 180) requestAnimationFrame(tick);
-      else { ctx.clearRect(0,0,W,H); canvas.classList.remove("on"); }
+      else {
+        ctx.clearRect(0, 0, W, H);
+        canvas.classList.remove("on");
+      }
     })();
   }
 
@@ -554,17 +656,24 @@
   document.getElementById("hintBtn").addEventListener("click", giveHint);
   document.getElementById("modeBtn").addEventListener("click", () => {
     const next = mode === "daily" ? "random" : "daily";
-    if (next === "daily") { loadDailyOrNew(); } else { newGame("random"); }
+    if (next === "daily") {
+      loadDailyOrNew();
+    } else {
+      newGame("random");
+    }
     toast(next === "daily" ? "Daily challenge" : "Random word");
   });
 
   function loadDailyOrNew() {
     const g = loadJSON(STORAGE_KEY, null);
-    if (g && g.mode === "daily" && g.day === todayStamp()) { game = g; mode = "daily"; renderAll(); }
-    else newGame("daily");
+    if (g && g.mode === "daily" && g.day === todayStamp()) {
+      game = g;
+      mode = "daily";
+      renderAll();
+    } else newGame("daily");
   }
 
-  document.addEventListener("keydown", e => {
+  document.addEventListener("keydown", (e) => {
     if (!settings.autoFocus) return;
     if (modalRoot.classList.contains("open")) {
       if (e.key === "Escape") closeModal();
@@ -572,20 +681,33 @@
     }
     if (e.ctrlKey || e.metaKey || e.altKey) return;
     const k = e.key.toUpperCase();
-    if (k === "ENTER") { e.preventDefault(); handleKey("ENTER"); }
-    else if (k === "BACKSPACE") { e.preventDefault(); handleKey("BACK"); }
-    else if (/^[A-Z]$/.test(k)) { e.preventDefault(); handleKey(k); }
+    if (k === "ENTER") {
+      e.preventDefault();
+      handleKey("ENTER");
+    } else if (k === "BACKSPACE") {
+      e.preventDefault();
+      handleKey("BACK");
+    } else if (/^[A-Z]$/.test(k)) {
+      e.preventDefault();
+      handleKey(k);
+    }
   });
 
   // Prevent double-tap zoom on iOS
   let lastTap = 0;
-  document.addEventListener("touchend", e => {
-    const now = Date.now();
-    if (now - lastTap < 300) e.preventDefault();
-    lastTap = now;
-  }, { passive: false });
+  document.addEventListener(
+    "touchend",
+    (e) => {
+      const now = Date.now();
+      if (now - lastTap < 300) e.preventDefault();
+      lastTap = now;
+    },
+    { passive: false },
+  );
 
-  window.addEventListener("resize", () => { /* board is responsive via CSS */ });
+  window.addEventListener("resize", () => {
+    /* board is responsive via CSS */
+  });
 
   // Boot
   applySettings();
