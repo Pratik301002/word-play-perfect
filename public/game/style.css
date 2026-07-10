@@ -314,26 +314,6 @@ body {
   color: #d7dadc;
 }
 
-@media (max-height: 640px) {
-  :root {
-    --tile-size: min(52px, 12.5vw);
-  }
-  .key {
-    height: 48px;
-  }
-}
-@media (max-width: 360px) {
-  .keyboard {
-    gap: 4px;
-    padding: 2px;
-  }
-  .krow {
-    gap: 4px;
-  }
-  .key {
-    height: 52px;
-  }
-}
 
 /* Toaster */
 .toaster {
