@@ -43,6 +43,7 @@ body {
 body {
   display: flex;
   flex-direction: column;
+  height: 100dvh;
   min-height: 100dvh;
   overflow: hidden;
   padding-top: env(safe-area-inset-top);
@@ -58,6 +59,7 @@ body {
   padding: 8px 12px;
   border-bottom: 1px solid var(--border);
   min-height: 52px;
+  flex: 0 0 auto;
 }
 .topbar-left {
   display: flex;
@@ -101,11 +103,12 @@ body {
 
 /* Game area */
 .game {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-between;
   padding: 6px 8px;
   gap: 8px;
   overflow: hidden;
@@ -116,6 +119,7 @@ body {
   text-transform: uppercase;
   color: var(--muted);
   margin-top: 2px;
+  flex: 0 0 auto;
 }
 
 /* Board */
@@ -124,7 +128,8 @@ body {
   grid-template-rows: repeat(6, var(--tile-size));
   gap: var(--tile-gap);
   padding: 8px;
-  flex: 1 0 auto;
+  flex: 1 1 auto;
+  min-height: 0;
   place-content: center;
 }
 .row {
@@ -261,26 +266,30 @@ body {
   max-width: 500px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 4px;
-  margin: 0 auto 4px;
+  gap: 8px;
+  padding: 0 8px 8px;
+  margin: 0 auto;
+  flex: 0 0 auto;
+  box-sizing: border-box;
 }
 .krow {
   display: flex;
   gap: 6px;
   justify-content: center;
   touch-action: manipulation;
+  width: 100%;
 }
 .key {
-  flex: 1 0 0;
+  flex: 1;
   height: 58px;
   min-width: 0;
+  max-width: 43px;
   background: var(--key);
   color: var(--key-fg);
   border: 0;
   border-radius: var(--radius);
   font-weight: 700;
-  font-size: clamp(11px, 3.4vw, 14px);
+  font-size: 13px;
   text-transform: uppercase;
   cursor: pointer;
   display: inline-flex;
@@ -291,13 +300,15 @@ body {
     transform 80ms ease,
     color 400ms ease;
   user-select: none;
+  padding: 0;
 }
 .key:active {
   transform: scale(0.95);
 }
 .key.wide {
-  flex: 1.5 0 0;
-  font-size: clamp(10px, 2.8vw, 12px);
+  flex: 1.5;
+  max-width: 66px;
+  font-size: 11px;
 }
 .key.correct {
   background: var(--green);
@@ -321,8 +332,8 @@ body {
   }
 
   .keyboard {
-    gap: 4px;
-    padding: 4px;
+    gap: 6px;
+    padding: 0 6px 6px;
   }
 
   .krow {
@@ -330,12 +341,12 @@ body {
   }
 
   .key {
-    height: 44px;
+    height: 48px;
     font-size: 12px;
   }
 
   .key.wide {
-    font-size: 11px;
+    font-size: 10px;
   }
 
   .topbar {
@@ -346,6 +357,15 @@ body {
   .mode-indicator {
     font-size: 10px;
     margin: 2px 0;
+  }
+}
+
+@media (max-height: 600px) {
+  .key {
+    height: 42px;
+  }
+  .keyboard {
+    gap: 4px;
   }
 }
 
@@ -362,7 +382,7 @@ body {
 
   .keyboard {
     gap: 3px;
-    padding: 2px;
+    padding: 0 2px 2px;
   }
 
   .krow {
@@ -371,10 +391,12 @@ body {
 
   .key {
     height: 40px;
+    max-width: 34px;
     font-size: 11px;
   }
 
   .key.wide {
+    max-width: 52px;
     font-size: 10px;
   }
 }
