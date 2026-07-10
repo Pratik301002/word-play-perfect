@@ -156,6 +156,7 @@
     renderKeyboard();
     updateModeIndicator();
     applySettings();
+    sizeBoard();  
   }
   function updateModeIndicator() {
     modeIndicatorEl.textContent = mode === "daily" ? `Daily #${dayNumber()}` : "Random";
