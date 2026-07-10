@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
+      { title: "Wordle — Daily Word Game" },
+      { name: "description", content: "A polished, mobile-first daily 5-letter word game clone. Play unlimited or daily challenges." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:title", content: "Wordle — Daily Word Game" },
+      { property: "og:description", content: "A polished, mobile-first daily 5-letter word game clone. Play unlimited or daily challenges." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Wordle — Daily Word Game" },
+      { name: "twitter:description", content: "A polished, mobile-first daily 5-letter word game clone. Play unlimited or daily challenges." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f77edfd3-fe31-4612-aed2-de4a8dbcd5cc/id-preview-cee1ce17--3d7eb04c-ec57-474b-b62b-a6b30e29969a.lovable.app-1783688679484.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f77edfd3-fe31-4612-aed2-de4a8dbcd5cc/id-preview-cee1ce17--3d7eb04c-ec57-474b-b62b-a6b30e29969a.lovable.app-1783688679484.png" },
     ],
     links: [
       {

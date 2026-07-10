@@ -6,7 +6,7 @@ export const Route = createFileRoute("/")({
       { title: "Wordle — Daily Word Game" },
       { name: "description", content: "A polished, mobile-first daily 5-letter word game clone. Play unlimited or daily challenges." },
       { property: "og:title", content: "Wordle — Daily Word Game" },
-      { property: "og:description", content: "A polished, mobile-first daily 5-letter word game." },
+      { property: "og:description", content: "A polished, mobile-first daily 5-letter word game clone. Play unlimited or daily challenges." },
     ],
   }),
   component: Index,
