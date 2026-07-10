@@ -149,6 +149,23 @@
   
     const tileSize = Math.max(38, Math.min(byHeight, byWidth, 62));
     document.documentElement.style.setProperty("--tile-size", `${tileSize}px`);
+    document.documentElement.style.setProperty("--tile-size", `${tileSize}px`);
+
+  // TEMP DEBUG — remove once fixed
+  let debug = document.getElementById("debugBox");
+  if (!debug) {
+    debug = document.createElement("div");
+    debug.id = "debugBox";
+    debug.style.cssText =
+      "position:fixed;top:0;left:0;right:0;background:red;color:#fff;font-size:11px;padding:4px;z-index:9999;font-family:monospace;white-space:pre-wrap;";
+    document.body.appendChild(debug);
+  }
+  debug.textContent =
+    `appHeight:${getComputedStyle(document.documentElement).getPropertyValue("--app-height")} ` +
+    `bodyH:${document.body.clientHeight} gameH:${gameEl.clientHeight} ` +
+    `kbH:${keyboardEl.offsetHeight} tile:${Math.round(tileSize)} ` +
+    `winH:${window.innerHeight} vvH:${window.visualViewport ? Math.round(window.visualViewport.height) : "n/a"}`;
+
   }
 
   function renderAll() {
