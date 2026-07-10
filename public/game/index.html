@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+<meta name="theme-color" content="#121213" />
+<meta name="description" content="A polished 5-letter word game." />
+<title>Wordle</title>
+<link rel="icon" href="/favicon.ico" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="topbar" role="banner">
+  <div class="topbar-left">
+    <button class="icon-btn" id="statsBtn" aria-label="Statistics" title="Statistics">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M4 20h3V10H4v10zm6.5 0h3V4h-3v16zM17 20h3v-6h-3v6z"/></svg>
+    </button>
+    <button class="icon-btn" id="helpBtn" aria-label="Help" title="How to play">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 100 20 10 10 0 000-20zm.9 15.2h-1.8v-1.8h1.8v1.8zm1.86-6.98l-.81.83c-.65.66-1.05 1.2-1.05 2.55h-1.8v-.45c0-.99.4-1.88 1.05-2.54l1.12-1.14c.33-.33.53-.79.53-1.29 0-1-.81-1.8-1.8-1.8s-1.8.8-1.8 1.8H7.5A3.6 3.6 0 0111.1 4a3.6 3.6 0 013.6 3.6c0 .79-.32 1.51-.84 2.03z"/></svg>
+    </button>
+  </div>
+  <h1 class="title" aria-label="Wordle">WORDLE</h1>
+  <div class="topbar-right">
+    <button class="icon-btn" id="hintBtn" aria-label="Hint" title="Hint">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M9 21h6v-1H9v1zm3-19a7 7 0 00-4 12.74V17a1 1 0 001 1h6a1 1 0 001-1v-2.26A7 7 0 0012 2z"/></svg>
+    </button>
+    <button class="icon-btn" id="modeBtn" aria-label="Switch mode" title="Switch mode">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M12 6V3L8 7l4 4V8a5 5 0 015 5 5 5 0 01-5 5 5 5 0 01-4.9-4H5.07A7 7 0 1012 6z"/></svg>
+    </button>
+    <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94a7.49 7.49 0 000-1.88l2.03-1.58a.5.5 0 00.12-.64l-1.92-3.32a.5.5 0 00-.6-.22l-2.39.96a7.03 7.03 0 00-1.62-.94l-.36-2.54a.5.5 0 00-.5-.42h-3.84a.5.5 0 00-.5.42l-.36 2.54a7.02 7.02 0 00-1.62.94l-2.39-.96a.5.5 0 00-.6.22L2.71 8.84a.5.5 0 00.12.64l2.03 1.58a7.49 7.49 0 000 1.88l-2.03 1.58a.5.5 0 00-.12.64l1.92 3.32c.14.24.42.34.66.22l2.39-.96c.49.38 1.04.7 1.62.94l.36 2.54c.04.24.25.42.5.42h3.84c.25 0 .46-.18.5-.42l.36-2.54c.58-.24 1.13-.56 1.62-.94l2.39.96c.24.12.52.02.66-.22l1.92-3.32a.5.5 0 00-.12-.64l-2.03-1.58zM12 15.5a3.5 3.5 0 110-7 3.5 3.5 0 010 7z"/></svg>
+    </button>
+  </div>
+</header>
+<main class="game" role="main">
+  <div class="mode-indicator" id="modeIndicator" aria-live="polite">Daily</div>
+  <div class="board" id="board" role="grid" aria-label="Game board"></div>
+  <div class="keyboard" id="keyboard" role="group" aria-label="On-screen keyboard"></div>
+</main>
+<div class="toaster" id="toaster" role="status" aria-live="polite"></div>
+<div class="modal-root" id="modalRoot" aria-hidden="true"></div>
+<canvas id="confetti" class="confetti" aria-hidden="true"></canvas>
+<script src="words.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
