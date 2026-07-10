@@ -43,8 +43,8 @@ body {
 body {
   display: flex;
   flex-direction: column;
-  height: 100dvh;
-  min-height: 100dvh;
+  height: calc(var(--app-height, 100dvh));
+  min-height: calc(var(--app-height, 100dvh));
   overflow: hidden;
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);

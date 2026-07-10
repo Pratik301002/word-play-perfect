@@ -117,6 +117,11 @@
   const keyboardEl = document.getElementById("keyboard");
   const modeIndicatorEl = document.getElementById("modeIndicator");
 
+  function setAppHeight() {
+    const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    document.documentElement.style.setProperty("--app-height", `${h}px`);
+  }
+
   function sizeBoard() {
     const gameEl = document.querySelector(".game");
     const boardEl = document.getElementById("board");
@@ -740,6 +745,7 @@
   );
 
   // Boot
+  setAppHeight();
   sizeBoard();
   applySettings();
   loadGame();
