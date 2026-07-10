@@ -133,13 +133,15 @@
       parseFloat(gameStyles.paddingTop) + parseFloat(gameStyles.paddingBottom);
     const gameGap = parseFloat(gameStyles.gap) || 0;
   
+    const reservedKeyboard = keyboardEl.offsetHeight + 20;
+
     const availableHeight =
-      gameEl.clientHeight -
-      gamePaddingV -
-      modeIndicatorEl.offsetHeight -
-      keyboardEl.offsetHeight -
-      gameGap * 2; // gap above and below the board
-  
+        gameEl.clientHeight
+        - reservedKeyboard
+        - modeIndicatorEl.offsetHeight
+        - gamePaddingV
+        - 12;
+      
     const availableWidth = gameEl.clientWidth;
   
     const rows = 6, cols = 5, tileGap = 5, boardPadding = 16; // 8px * 2
