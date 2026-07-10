@@ -14,7 +14,7 @@
   --absent: #3a3a3c;
   --overlay: rgba(0, 0, 0, 0.6);
   --radius: 4px;
-  --tile-size: clamp(44px, 10vw, 60px);
+  --tile-size: clamp(40px, 10vw, 60px);
   --tile-gap: 5px;
   --flip-time: 500ms;
 }
