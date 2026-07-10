@@ -72,8 +72,8 @@
   function randomWord() {
     return ANSWER_WORDS[Math.floor(Math.random() * ANSWER_WORDS.length)];
   }
-  function isValidGuess(word) {
-    return VALID_WORDS.includes(word);
+  function isValidGuess(guess) {
+    return ANSWER_WORDS.includes(guess);
   }
 
   // ---------- Game init ----------
@@ -124,50 +124,24 @@
 
   function sizeBoard() {
     const gameEl = document.querySelector(".game");
-    const boardEl = document.getElementById("board");
     const keyboardEl = document.getElementById("keyboard");
-    if (!gameEl || !boardEl || !keyboardEl) return;
-  
+    if (!gameEl || !keyboardEl) return;
+
     const gameStyles = getComputedStyle(gameEl);
     const gamePaddingV =
       parseFloat(gameStyles.paddingTop) + parseFloat(gameStyles.paddingBottom);
-    const gameGap = parseFloat(gameStyles.gap) || 0;
-  
-    const reservedKeyboard = keyboardEl.offsetHeight + 20;
 
+    const reservedKeyboard = keyboardEl.offsetHeight + 12;
     const availableHeight =
-        gameEl.clientHeight
-        - reservedKeyboard
-        - modeIndicatorEl.offsetHeight
-        - gamePaddingV
-        - 12;
-      
+      gameEl.clientHeight - reservedKeyboard - modeIndicatorEl.offsetHeight - gamePaddingV;
     const availableWidth = gameEl.clientWidth;
-  
-    const rows = 6, cols = 5, tileGap = 5, boardPadding = 16; // 8px * 2
-  
+
+    const rows = 6, cols = 5, tileGap = 5, boardPadding = 8;
     const byHeight = (availableHeight - tileGap * (rows - 1) - boardPadding) / rows;
     const byWidth = (availableWidth - tileGap * (cols - 1) - boardPadding) / cols;
-  
-    const tileSize = Math.max(38, Math.min(byHeight, byWidth, 62));
-    document.documentElement.style.setProperty("--tile-size", `${tileSize}px`);
-    document.documentElement.style.setProperty("--tile-size", `${tileSize}px`);
 
-  // TEMP DEBUG — remove once fixed
-  let debug = document.getElementById("debugBox");
-  if (!debug) {
-    debug = document.createElement("div");
-    debug.id = "debugBox";
-    debug.style.cssText =
-      "position:fixed;top:0;left:0;right:0;background:red;color:#fff;font-size:11px;padding:4px;z-index:9999;font-family:monospace;white-space:pre-wrap;";
-    document.body.appendChild(debug);
-  }
-  debug.textContent =
-    `appHeight:${getComputedStyle(document.documentElement).getPropertyValue("--app-height")} ` +
-    `bodyH:${document.body.clientHeight} gameH:${gameEl.clientHeight} ` +
-    `kbH:${keyboardEl.offsetHeight} tile:${Math.round(tileSize)} ` +
-    `winH:${window.innerHeight} vvH:${window.visualViewport ? Math.round(window.visualViewport.height) : "n/a"}`;
-
+    const tileSize = Math.max(40, Math.min(byHeight, byWidth, 72));
+    document.documentElement.style.setProperty("--tile-size", `${tileSize}px`);
   }
 
   function renderAll() {

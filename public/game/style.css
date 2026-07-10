@@ -14,7 +14,7 @@
   --absent: #3a3a3c;
   --overlay: rgba(0, 0, 0, 0.6);
   --radius: 4px;
-  --tile-size: clamp(40px, 10vw, 60px);
+  --tile-size: clamp(44px, 12vw, 72px);
   --tile-gap: 5px;
   --flip-time: 500ms;
 }
@@ -131,10 +131,8 @@ body {
 
   padding: 4px;
 
-  flex: 1;
+  flex: 0 0 auto;
   place-content: center;
-
-  max-height: 55vh;
 }
 .row {
   display: grid;
@@ -274,7 +272,7 @@ body {
   gap: 6px;
 
   margin-top: auto;      /* pushes keyboard to bottom */
-  padding: 0 8px 12px;
+  padding: 0 8px max(14px, env(safe-area-inset-bottom));
 
   flex-shrink: 0;
 }
@@ -330,7 +328,7 @@ body {
 
 @media (max-height: 760px) {
   :root {
-    --tile-size: clamp(42px, 9vw, 52px);
+    --tile-size: clamp(44px, 10vw, 62px);
     --tile-gap: 4px;
   }
 
