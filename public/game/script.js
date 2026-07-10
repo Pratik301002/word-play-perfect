@@ -695,19 +695,20 @@
 
   // Prevent double-tap zoom on iOS
   let lastTap = 0;
+  let lastTapTarget = null;
   document.addEventListener(
     "touchend",
     (e) => {
       const now = Date.now();
-      if (now - lastTap < 300) e.preventDefault();
+      const target = e.target;
+      if (now - lastTap < 300 && target === lastTapTarget) {
+        e.preventDefault();
+      }
       lastTap = now;
+      lastTapTarget = target;
     },
     { passive: false },
   );
-
-  window.addEventListener("resize", () => {
-    /* board is responsive via CSS */
-  });
 
   // Boot
   applySettings();
