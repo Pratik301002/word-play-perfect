@@ -58,18 +58,21 @@ body {
   align-items: center;
   padding: 8px 12px;
   border-bottom: 1px solid var(--border);
-  min-height: 52px;
+  min-height: 56px;
   flex: 0 0 auto;
+  overflow: hidden;
 }
 .topbar-left {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   justify-self: start;
+  overflow: hidden;
 }
 .topbar-right {
   display: flex;
-  gap: 4px;
+  gap: 2px;
   justify-self: end;
+  overflow: hidden;
 }
 .title {
   margin: 0;
@@ -83,8 +86,8 @@ body {
   background: transparent;
   border: 0;
   color: var(--fg);
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: inline-flex;
   align-items: center;
@@ -286,15 +289,15 @@ body {
 }
 .key {
   flex: 1;
-  height: 58px;
+  height: 64px;
   min-width: 0;
-  max-width: 43px;
+  max-width: 48px;
   background: var(--key);
   color: var(--key-fg);
   border: 0;
   border-radius: var(--radius);
   font-weight: 700;
-  font-size: 13px;
+  font-size: 16px;
   text-transform: uppercase;
   cursor: pointer;
   display: inline-flex;
@@ -312,8 +315,8 @@ body {
 }
 .key.wide {
   flex: 1.5;
-  max-width: 66px;
-  font-size: 11px;
+  max-width: 76px;
+  font-size: 13px;
 }
 .key.correct {
   background: var(--green);
@@ -346,12 +349,12 @@ body {
   }
 
   .key {
-    height: 48px;
-    font-size: 12px;
+    height: 54px;
+    font-size: 15px;
   }
 
   .key.wide {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .topbar {
@@ -367,7 +370,7 @@ body {
 
 @media (max-height: 600px) {
   .key {
-    height: 42px;
+    height: 46px;
   }
   .keyboard {
     gap: 4px;
@@ -395,14 +398,14 @@ body {
   }
 
   .key {
-    height: 40px;
-    max-width: 34px;
-    font-size: 11px;
+    height: 46px;
+    max-width: 40px;
+    font-size: 13px;
   }
 
   .key.wide {
-    max-width: 52px;
-    font-size: 10px;
+    max-width: 60px;
+    font-size: 11px;
   }
 }
 /* Toaster */
