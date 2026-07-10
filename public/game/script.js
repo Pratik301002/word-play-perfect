@@ -744,11 +744,27 @@
     { passive: false },
   );
 
-  // Boot
   setAppHeight();
-  sizeBoard();
   applySettings();
-  loadGame();
+  loadGame();       // renders board + keyboard first
+  sizeBoard();      // NOW measure real keyboard height and size tiles
+  
+  window.addEventListener("resize", () => {
+    setAppHeight();
+    sizeBoard();
+  });
+  window.addEventListener("orientationchange", () => {
+    setTimeout(() => {
+      setAppHeight();
+      sizeBoard();
+    }, 50);
+  });
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", () => {
+      setAppHeight();
+      sizeBoard();
+    });
+  }
   // Show help modal once
   if (!localStorage.getItem("wordle.seenHelp")) {
     openHelpModal();
