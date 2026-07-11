@@ -693,24 +693,6 @@
   document.getElementById("helpBtn").addEventListener("click", openHelpModal);
   document.getElementById("settingsBtn").addEventListener("click", openSettingsModal);
   document.getElementById("hintBtn").addEventListener("click", giveHint);
-  document.getElementById("modeBtn").addEventListener("click", () => {
-    const next = mode === "daily" ? "random" : "daily";
-    if (next === "daily") {
-      loadDailyOrNew();
-    } else {
-      newGame("random");
-    }
-    toast(next === "daily" ? "Daily challenge" : "Random word");
-  });
-
-  function loadDailyOrNew() {
-    const g = loadJSON(STORAGE_KEY, null);
-    if (g && g.mode === "daily" && g.day === todayStamp()) {
-      game = g;
-      mode = "daily";
-      renderAll();
-    } else newGame("daily");
-  }
 
   document.addEventListener("keydown", (e) => {
     if (!settings.autoFocus) return;
